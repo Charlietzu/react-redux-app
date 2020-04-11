@@ -1,4 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
+import * as courseActions from "../../redux/actions/courseActions";
+import PropTypes from "prop-types";
+import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
   state = {
@@ -17,7 +21,10 @@ class CoursesPage extends React.Component {
   handleSubmit = (event) => {
     //prevent the form from posting back to the server
     event.preventDefault();
-    alert(this.state.course.title);
+    /**we don't need to call dispatch here since that's being handled in
+     * mapDispatchToProps.
+     */
+    this.props.actions.createCourse(this.state.course);
   };
 
   render() {
@@ -30,9 +37,34 @@ class CoursesPage extends React.Component {
           value={this.state.course.title}
         />
         <input type="submit" value="Save" />
+        {this.props.courses.map((course) => (
+          <div key={course.title}>{course.title}</div>
+        ))}
       </form>
     );
   }
 }
 
-export default CoursesPage;
+CoursesPage.propTypes = {
+  courses: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+
+/**mapStateToProps determines what state is passed to our component via props */
+function mapStateToProps(state) {
+  return {
+    courses: state.courses,
+  };
+}
+/**mapDispatchToProps let us declare what actions to pass to our component on props */
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(courseActions, dispatch),
+  };
+}
+
+/**connect returns a function, that function then calls our component.
+ * when we omit mapDispatchToProps, our component gets a dispatch prop
+ * injected automatically.
+ */
+export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);

@@ -1,4 +1,6 @@
+import * as types from "./actionTypes";
+
 export function createCourse(course) {
   //"course" is equal to "course: course", this is called object shorthand syntax
-  return { type: "CREATE_COURSE", course };
+  return { type: types.CREATE_COURSE, course };
 }

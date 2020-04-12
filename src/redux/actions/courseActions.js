@@ -1,13 +1,20 @@
 import * as types from "./actionTypes";
 import * as courseApi from "../../api/courseApi";
 
-export function createCourse(course) {
-  //"course" is equal to "course: course", this is called object shorthand syntax
-  return { type: types.CREATE_COURSE, course };
-}
-
 export function loadCoursesSuccess(courses) {
   return { type: types.LOAD_COURSES_SUCCESS, courses };
+}
+
+export function createCourseSuccess(course) {
+  //"course" is equal to "course: course", this is called object shorthand syntax
+  return {
+    type: types.CREATE_COURSE_SUCCESS,
+    course,
+  };
+}
+
+export function updateCourseSuccess(course) {
+  return { type: types.UPDATE_COURSE_SUCCESS, course };
 }
 
 export function loadCourses() {
@@ -22,6 +29,21 @@ export function loadCourses() {
          * successfully returned by our API call
          */
         dispatch(loadCoursesSuccess(courses));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+}
+
+export function saveCourse(course) {
+  return function (dispatch) {
+    return courseApi
+      .saveCourse(course)
+      .then((savedCourse) => {
+        course.id
+          ? dispatch(updateCourseSuccess(savedCourse))
+          : dispatch(createCourseSuccess(savedCourse));
       })
       .catch((error) => {
         throw error;

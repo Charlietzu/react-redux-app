@@ -12,6 +12,11 @@ export default function courseReducer(state = initialState.courses, action) {
       );
     case types.LOAD_COURSES_SUCCESS:
       return action.courses;
+    case types.DELETE_COURSE_OPTIMISTIC:
+      /**Returns a new array with all the courses, but with one course omitted, the course
+       * that has the course ID that we're trying to delete.
+       */
+      return state.filter((course) => course.id !== action.course.id);
     default:
       return state;
   }

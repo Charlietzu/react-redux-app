@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
  * ...props means: "Assign any props i haven't destructured on the left
  * to a variable called props."
  */
-function ManageCoursePage({
+export function ManageCoursePage({
   courses,
   authors,
   loadAuthors,

@@ -18,7 +18,7 @@ export function updateAuthorSuccess(author) {
 }
 
 export function deleteAuthorOptimistic(author) {
-  return { type: types.DELETE_COURSE_OPTIMISTIC, author };
+  return { type: types.DELETE_AUTHOR_OPTIMISTIC, author };
 }
 
 export function loadAuthors() {
@@ -56,6 +56,7 @@ export function saveAuthor(author) {
 export function deleteAuthor(author) {
   return function (dispatch) {
     dispatch(deleteAuthorOptimistic(author));
+    debugger;
     return authorApi.deleteAuthor(author.id);
   };
 }

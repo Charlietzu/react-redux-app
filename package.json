@@ -1,6 +1,7 @@
 {
   "name": "ps-redux",
   "description": "React and Redux Pluralsight course by Cory House",
+  "homepage": "https://charlietzu.github.io/react-redux-app-pages",
   "scripts": {
     "start": "run-p start:dev start:api",
     "start:dev": "webpack-dev-server --config webpack.config.dev.js --port 3000",
@@ -12,7 +13,9 @@
     "prebuild": "run-p clean:build test:ci",
     "build": "webpack --config webpack.config.prod.js",
     "postbuild": "run-p start:api serve:build",
-    "serve:build": "http-server ./build"
+    "serve:build": "http-server ./build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "jest": {
     "setupFiles": [
@@ -50,6 +53,7 @@
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-react": "7.12.4",
     "fetch-mock": "7.3.1",
+    "gh-pages": "^3.0.0",
     "html-webpack-plugin": "3.2.0",
     "http-server": "^0.12.1",
     "jest": "24.5.0",

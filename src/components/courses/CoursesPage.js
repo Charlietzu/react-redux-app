@@ -57,7 +57,7 @@ class CoursesPage extends React.Component {
     return (
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
-        <h2>Courses</h2>
+        <h2>Courses ({this.props.courses.length})</h2>
         {this.props.loading ? (
           <Spinner />
         ) : (

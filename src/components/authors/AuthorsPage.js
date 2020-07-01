@@ -50,7 +50,7 @@ class AuthorsPage extends React.Component {
     return (
       <>
         {this.state.redirectToAddAuthorPage && <Redirect to="/author" />}
-        <h2>Authors</h2>
+        <h2>Authors ({this.props.authors.length})</h2>
         {this.props.loading ? (
           <Spinner />
         ) : (

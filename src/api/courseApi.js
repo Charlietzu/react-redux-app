@@ -12,6 +12,12 @@ export function filterCoursesByGlobal(searchTerm) {
     .catch(handleError);
 }
 
+export function filterCoursesByAuthor(authorId) {
+  return fetch(auxUrl + "?authorId=" + authorId)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export function saveCourse(course) {
   return fetch(baseUrl + (course.id || ""), {
     method: course.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.

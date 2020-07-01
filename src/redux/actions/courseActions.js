@@ -84,3 +84,18 @@ export function filterCoursesByGlobal(searchTerm) {
       });
   };
 }
+
+export function filterCoursesByAuthor(authorId) {
+  return function (dispatch) {
+    dispatch(beginApiCall());
+    return courseApi
+      .filterCoursesByAuthor(authorId)
+      .then((courses) => {
+        dispatch(loadCoursesSuccess(courses));
+      })
+      .catch((error) => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+}

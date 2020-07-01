@@ -31,11 +31,18 @@ class AuthorsPage extends React.Component {
   }
 
   handleDeleteAuthor = async (author) => {
-    toast.success("Author deleted");
-    try {
-      await this.props.actions.deleteAuthor(author);
-    } catch (error) {
-      toast.error("Delete failed" + error.message, { autoClose: false });
+    await this.props.actions.filterCoursesByAuthor(author.id);
+    if (this.props.courses.length > 0) {
+      toast.error(
+        "You cannot delete an author who is registered in a course! Delete the course first."
+      );
+    } else {
+      toast.success("Author deleted.");
+      try {
+        await this.props.actions.deleteAuthor(author);
+      } catch (error) {
+        toast.error("Delete failed" + error.message, { autoClose: false });
+      }
     }
   };
 
@@ -88,6 +95,10 @@ function mapDispatchToProps(dispatch) {
       loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
       deleteAuthor: bindActionCreators(authorActions.deleteAuthor, dispatch),
       loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
+      filterCoursesByAuthor: bindActionCreators(
+        courseActions.filterCoursesByAuthor,
+        dispatch
+      ),
     },
   };
 }

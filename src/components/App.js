@@ -26,7 +26,7 @@ function App() {
         <Route path="/author" component={ManageAuthorPage} />
         <Route component={PageNotFound} />
       </Switch>
-      <ToastContainer autoClose={3000} hideProgressBar />
+      <ToastContainer autoClose={4000} hideProgressBar />
     </div>
   );
 }

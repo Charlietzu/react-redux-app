@@ -56,7 +56,6 @@ export function saveAuthor(author) {
 export function deleteAuthor(author) {
   return function (dispatch) {
     dispatch(deleteAuthorOptimistic(author));
-    debugger;
     return authorApi.deleteAuthor(author.id);
   };
 }

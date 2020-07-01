@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
@@ -46,6 +47,12 @@ class CoursesPage extends React.Component {
     }
   };
 
+  handleFilterByGlobal = async (event) => {
+    event.preventDefault();
+    let searchTerm = event.target.filter.value;
+    let filter = await this.props.actions.filterCoursesByGlobal(searchTerm);
+  };
+
   render() {
     return (
       <>
@@ -57,11 +64,22 @@ class CoursesPage extends React.Component {
           <>
             <button
               style={{ marginBottom: 20 }}
-              className="btn btn-primary add-course"
+              className="btn btn-primary float-right"
               onClick={() => this.setState({ redirectToAddCoursePage: true })}
             >
               Add Course
             </button>
+            <form
+              className="form-inline float-left my-2 my-lg-0"
+              onSubmit={this.handleFilterByGlobal}
+            >
+              <input
+                className="form-control mr-sm-2"
+                type="text"
+                name="filter"
+                placeholder="Type and press ENTER"
+              />
+            </form>
 
             <CourseList
               onDeleteClick={this.handleDeleteCourse}
@@ -113,6 +131,10 @@ function mapDispatchToProps(dispatch) {
       loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
       deleteCourse: bindActionCreators(courseActions.deleteCourse, dispatch),
       loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
+      filterCoursesByGlobal: bindActionCreators(
+        courseActions.filterCoursesByGlobal,
+        dispatch
+      ),
     },
   };
 }

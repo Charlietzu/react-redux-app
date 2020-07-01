@@ -1,8 +1,15 @@
 import { handleResponse, handleError } from "./apiUtils";
 const baseUrl = process.env.API_URL + "/courses/";
+const auxUrl = process.env.API_URL + "/courses";
 
 export function getCourses() {
   return fetch(baseUrl).then(handleResponse).catch(handleError);
+}
+
+export function filterCoursesByGlobal(searchTerm) {
+  return fetch(auxUrl + "?q=" + searchTerm)
+    .then(handleResponse)
+    .catch(handleError);
 }
 
 export function saveCourse(course) {

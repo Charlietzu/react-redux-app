@@ -69,3 +69,18 @@ export function deleteCourse(course) {
     return courseApi.deleteCourse(course.id);
   };
 }
+
+export function filterCoursesByGlobal(searchTerm) {
+  return function (dispatch) {
+    dispatch(beginApiCall());
+    return courseApi
+      .filterCoursesByGlobal(searchTerm)
+      .then((courses) => {
+        dispatch(loadCoursesSuccess(courses));
+      })
+      .catch((error) => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+}

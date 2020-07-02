@@ -2,7 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const CourseList = ({ courses, onDeleteClick }) => (
+const CourseList = ({
+  courses,
+  onDeleteClick,
+  handleSortCourses,
+  filtered,
+  handleSortFilteredCourses,
+}) => (
   /**i could declarate this component using (props) instead of ({ courses })
    * and then putting here the line below:
    * const { courses } = props;
@@ -12,9 +18,27 @@ const CourseList = ({ courses, onDeleteClick }) => (
     <thead>
       <tr>
         <th />
-        <th>Title</th>
+        <th>
+          <span
+            id="title"
+            onClick={(e) =>
+              filtered ? handleSortFilteredCourses(e) : handleSortCourses(e)
+            }
+          >
+            Title
+          </span>
+        </th>
         <th>Author</th>
-        <th>Category</th>
+        <th>
+          <span
+            id="category"
+            onClick={(e) =>
+              filtered ? handleSortFilteredCourses(e) : handleSortCourses(e)
+            }
+          >
+            Category
+          </span>
+        </th>
         <th />
       </tr>
     </thead>
@@ -53,6 +77,9 @@ const CourseList = ({ courses, onDeleteClick }) => (
 CourseList.propTypes = {
   courses: PropTypes.array.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
+  handleSortCourses: PropTypes.func.isRequired,
+  handleSortFilteredCourses: PropTypes.func.isRequired,
+  filtered: PropTypes.bool.isRequired,
 };
 
 export default CourseList;

@@ -13,6 +13,9 @@ import { toast } from "react-toastify";
 class CoursesPage extends React.Component {
   state = {
     redirectToAddCoursePage: false,
+    order: false,
+    filtered: false,
+    searchTerm: "",
   };
 
   componentDidMount() {
@@ -50,8 +53,40 @@ class CoursesPage extends React.Component {
   handleFilterByGlobal = async (event) => {
     event.preventDefault();
     let searchTerm = event.target.filter.value;
+    this.setState({ searchTerm });
+    if (searchTerm === "") {
+      this.setState({ filtered: false });
+    } else {
+      this.setState({ filtered: true });
+    }
     let filter = await this.props.actions.filterCoursesByGlobal(searchTerm);
   };
+
+  handleSortCourses = async (event) => {
+    event.preventDefault();
+    console.log("handleSortCourses");
+    let field = event.target.id;
+    this.setState({ order: !this.state.order });
+    let ordenation = this.state.order ? "desc" : "asc";
+    let sort = await this.props.actions.sortCourses(field, ordenation);
+  };
+
+  handleSortFilteredCourses = async (event) => {
+    event.preventDefault();
+    console.log("handleSortFilteredCourses");
+    let field = event.target.id;
+    this.setState({ order: !this.state.order });
+    let ordenation = this.state.order ? "desc" : "asc";
+    let sort = await this.props.actions.sortFilteredCourses(
+      this.state.searchTerm,
+      field,
+      ordenation
+    );
+  };
+
+  handleChange(event) {
+    this.setState({ searchTerm: event.target.value });
+  }
 
   render() {
     return (
@@ -62,26 +97,42 @@ class CoursesPage extends React.Component {
           <Spinner />
         ) : (
           <>
-            <button
-              style={{ marginBottom: 20 }}
-              className="btn btn-primary float-right"
-              onClick={() => this.setState({ redirectToAddCoursePage: true })}
-            >
-              Add Course
-            </button>
-            <form
-              className="form-inline float-left my-2 my-lg-0"
-              onSubmit={this.handleFilterByGlobal}
-            >
-              <input
-                className="form-control mr-sm-2"
-                type="text"
-                name="filter"
-                placeholder="Type and press ENTER"
-              />
-            </form>
-
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <button
+                  className="btn btn-primary"
+                  onClick={() =>
+                    this.setState({ redirectToAddCoursePage: true })
+                  }
+                >
+                  Add Course
+                </button>
+              </div>
+              <div className="row mb-2">
+                <form
+                  className="form-inline float-left my-2 my-lg-0"
+                  onSubmit={this.handleFilterByGlobal}
+                >
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="filter"
+                    placeholder="Type and press ENTER"
+                    onChange={this.handleChange.bind(this)}
+                  />
+                  <button
+                    className="btn btn-outline-success mt-2 ml-0 mt-sm-0 ml-sm-2"
+                    onClick={() => this.props.actions.loadCourses}
+                  >
+                    Clear
+                  </button>
+                </form>
+              </div>
+            </div>
             <CourseList
+              filtered={this.state.filtered}
+              handleSortFilteredCourses={this.handleSortFilteredCourses}
+              handleSortCourses={this.handleSortCourses}
               onDeleteClick={this.handleDeleteCourse}
               courses={this.props.courses}
             />
@@ -97,6 +148,7 @@ CoursesPage.propTypes = {
   authors: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 /**mapStateToProps determines what state is passed to our component via props */
@@ -133,6 +185,11 @@ function mapDispatchToProps(dispatch) {
       loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
       filterCoursesByGlobal: bindActionCreators(
         courseActions.filterCoursesByGlobal,
+        dispatch
+      ),
+      sortCourses: bindActionCreators(courseActions.sortCourses, dispatch),
+      sortFilteredCourses: bindActionCreators(
+        courseActions.sortFilteredCourses,
         dispatch
       ),
     },

@@ -85,6 +85,36 @@ export function filterCoursesByGlobal(searchTerm) {
   };
 }
 
+export function sortCourses(field, order) {
+  return function (dispatch) {
+    dispatch(beginApiCall());
+    return courseApi
+      .sortCourses(field, order)
+      .then((courses) => {
+        dispatch(loadCoursesSuccess(courses));
+      })
+      .catch((error) => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+}
+
+export function sortFilteredCourses(searchTerm, field, order) {
+  return function (dispatch) {
+    dispatch(beginApiCall());
+    return courseApi
+      .sortFilteredCourses(searchTerm, field, order)
+      .then((courses) => {
+        dispatch(loadCoursesSuccess(courses));
+      })
+      .catch((error) => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+}
+
 export function filterCoursesByAuthor(authorId) {
   return function (dispatch) {
     dispatch(beginApiCall());
